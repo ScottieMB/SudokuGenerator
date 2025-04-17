@@ -12,19 +12,6 @@ int main()
     // Set up header
     sf::Font font("assets/SpecialGothicCondensedOne-Regular.ttf");
     sf::Text header(font);
-    header.setString("Sudoku");
-    header.setCharacterSize(24);
-    header.setFillColor(sf::Color::Blue);
-    header.setStyle(sf::Text::Bold);
-    
-    // Position the header in the correct center
-    sf::FloatRect bounds = header.getLocalBounds(); 
-    sf::Vector2f origin;
-    origin.x = bounds.position.x + bounds.size.x / 2.f;
-    origin.y = bounds.position.y + bounds.size.y / 2.f;
-    header.setOrigin(origin);
-    sf::Vector2f pos(window.getSize().x / 2.0f, 40.f);
-    header.setPosition(pos);
 
     // Set up buttons
     sf::Text generate(font);
@@ -39,6 +26,7 @@ int main()
     reset.setStyle(sf::Text::Bold);
 
     // Position the buttons correctly
+    // TODO
     sf::FloatRect genBounds = generate.getLocalBounds();
     sf::FloatRect resetBounds = reset.getLocalBounds();
     sf::Vector2f genOrigin;
@@ -85,32 +73,6 @@ int main()
     const float gridStartY = 75.0f;
     const float cellSize = gridSize / 18.0f;
     const float cellCenter = cellSize / 2.0f;
-    
-    // Create our lines
-    sf::VertexArray rows(sf::PrimitiveType::Lines, 20);
-    sf::VertexArray cols(sf::PrimitiveType::Lines, 20);
-    sf::VertexArray thickLinesRows(sf::PrimitiveType::Lines, 10);
-    sf::VertexArray thickLinesCols(sf::PrimitiveType::Lines, 10);
-
-    for (int i = 0; i < 20; i += 2)
-    {
-        // rows
-        float x = gridStartX + i * cellSize;
-        cols[i].position = sf::Vector2f(x, gridStartY);
-        cols[i + 1].position = sf::Vector2f(x, gridStartY + gridSize);
-        cols[i].color = sf::Color::Blue;
-        cols[i + 1].color = sf::Color::Blue;
-
-        // cols
-        float y = gridStartY + i * cellSize;
-        rows[i].position = sf::Vector2f(gridStartX, y);
-        rows[i + 1].position = sf::Vector2f(gridStartX + gridSize, y);
-        rows[i].color = sf::Color::Blue;
-        rows[i + 1].color = sf::Color::Blue;
-    }
-
-    sf::Clock animationClock;
-    float animationSpeed = 0.05f;
 
     while (window.isOpen()) {
         while (const std::optional event = window.pollEvent()) 
@@ -135,7 +97,7 @@ int main()
                 // generate the board
                 if (genBounds.contains(mousePos))
                 {
-                    myBoard.constructBoard(0);
+                    myBoard.constructBoard(0, window, font, header, gridStartX, gridStartY, cellSize, gridSize, cellCenter);
                 }
 
                 // reset it back to 0s
@@ -146,55 +108,18 @@ int main()
             }
         }
 
-        // Color and clear the window
+        // Color the window
         window.clear(sf::Color(240, 240, 240));
 
-        // Draw the grid and text
-        window.draw(rows);
-        window.draw(cols);
-        window.draw(header);
-        window.draw(reset);
-        window.draw(generate);
-        window.draw(genButton);
-        window.draw(resetButton);
-
-        for (int row = 0; row < 9; ++row) 
-        {
-            for (int col = 0; col < 9; ++col) 
-            {
-                int value = myBoard.getValue(row, col);
-
-                sf::Text cellText(font, std::to_string(value));
-                cellText.setCharacterSize(18);
-                cellText.setFillColor(sf::Color::Black);
-
-                // Center the origin of the text
-                sf::FloatRect textBounds = cellText.getLocalBounds();
-                sf::Vector2f textOrigin;
-                textOrigin.x = textBounds.position.x + textBounds.size.x / 2.f;
-                textOrigin.y = textBounds.position.y + textBounds.size.y / 2.f;
-                cellText.setOrigin(textOrigin);
-
-                // Position the text in the center of the cell
-                float x = gridStartX + col * 2 * cellSize + cellSize;
-                float y = gridStartY + row * 2 * cellSize + cellSize;
-                sf::Vector2f nums(x, y);
-                cellText.setPosition(nums);
-
-                window.draw(cellText);
-            }
-        }
+        // Draw everything
+        myBoard.drawHeader(window, font, header);
+        myBoard.drawGrid(window, gridStartX, gridStartY, gridSize, cellSize, cellCenter);
+        myBoard.drawButtons(window, font);
+        myBoard.drawCell(window, font, gridStartX, gridStartY, cellSize);
 
         // Display the contents of the window
         window.display();
     }
-
-    myBoard.printBoard();
-
-    /* remove values
-    Remover remover(myBoard);
-    remover.Remove(0);
-    remover.printUnsolved();*/
 
     return 0;
 }
