@@ -6,11 +6,8 @@
 
 int main() 
 {
-    // create window
+    // create window and set up text
     sf::RenderWindow window(sf::VideoMode({600, 600}), "Sudoku");
-    SFML sfml(window);
-    
-    // Set up header
     sf::Font font("assets/SpecialGothicCondensedOne-Regular.ttf");
     sf::Text generate(font);
     sf::Text reset(font);
@@ -19,6 +16,7 @@ int main()
     // Generate the 9x9 board and declare the SFML object
     srand(time(NULL));
     Board myBoard;
+    SFML sfml;
 
     const float gridSize = 450.0f;
     const float gridStartX = 75.0f;

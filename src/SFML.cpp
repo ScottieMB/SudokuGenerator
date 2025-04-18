@@ -1,20 +1,6 @@
 #include "Board.h"
 #include "SFML.h"
 
-SFML::SFML() : window(nullptr)
-{
-    
-};
-
-SFML::SFML(sf::RenderWindow& window)
-{
-    if (!font.openFromFile("assets/SpecialGothicCondensedOne-Regular.ttf")) {
-        // Handle font loading failure
-        std::cerr << "Failed to load font!" << std::endl;
-        return;
-    }
-}
-
 void SFML::drawCell(sf::RenderWindow& window, sf::Font& font, const float& gridStartX, const float& gridStartY, const float& cellSize, Board& board)
 {
     for (int row = 0; row < 9; ++row) 
@@ -79,6 +65,7 @@ void SFML::drawButtons(sf::RenderWindow& window, sf::Font& font, sf::Text& gener
 {
     float padding = 10.0f;
 
+    // Set up button style
     generate.setString("Generate a Board");
     generate.setCharacterSize(22);
     generate.setFillColor(sf::Color::Green);
@@ -89,6 +76,7 @@ void SFML::drawButtons(sf::RenderWindow& window, sf::Font& font, sf::Text& gener
     reset.setFillColor(sf::Color::Red);
     reset.setStyle(sf::Text::Bold);
 
+    // Set origin to the center of text and place it on screen
     sf::FloatRect genBounds = generate.getLocalBounds();
     sf::Vector2f genOrigin;
     genOrigin.x = genBounds.position.x + genBounds.size.x / 2.0f;
@@ -97,6 +85,7 @@ void SFML::drawButtons(sf::RenderWindow& window, sf::Font& font, sf::Text& gener
     sf::Vector2f genPos(window.getSize().x / 2.0f - 100.0f, 570.f);
     generate.setPosition(genPos);
 
+    // Same thing as above
     sf::FloatRect resetBounds = reset.getLocalBounds();
     sf::Vector2f resetOrigin;
     resetOrigin.x = resetBounds.position.x + resetBounds.size.x / 2.0f;
@@ -105,6 +94,7 @@ void SFML::drawButtons(sf::RenderWindow& window, sf::Font& font, sf::Text& gener
     sf::Vector2f resetPos(window.getSize().x / 2.0f + 100.0f, 570.0f);
     reset.setPosition(resetPos);
 
+    // Set up generate button
     sf::FloatRect genTextBounds = generate.getGlobalBounds();
     genButton.setSize(sf::Vector2f(genTextBounds.size.x + padding * 2, genTextBounds.size.y + padding * 2));
     genButton.setOrigin(genButton.getSize() / 2.f);
@@ -113,7 +103,9 @@ void SFML::drawButtons(sf::RenderWindow& window, sf::Font& font, sf::Text& gener
     genButton.setOutlineColor(sf::Color::Black);
     genButton.setOutlineThickness(2.f);
 
-    sf::FloatRect resetTextBounds = reset.getGlobalBounds();    resetButton.setSize(sf::Vector2f(resetTextBounds.size.x + padding * 2, resetTextBounds.size.y + padding * 2));
+    // Set up reset button
+    sf::FloatRect resetTextBounds = reset.getGlobalBounds();    
+    resetButton.setSize(sf::Vector2f(resetTextBounds.size.x + padding * 2, resetTextBounds.size.y + padding * 2));
     resetButton.setOrigin(resetButton.getSize() / 2.f);
     resetButton.setPosition(reset.getPosition());
     resetButton.setFillColor(sf::Color(200, 200, 200, 100));
@@ -146,6 +138,7 @@ void SFML::drawHeader(sf::RenderWindow& window, sf::Font& font, sf::Text& header
     window.draw(header);
 }
 
+// Helper functions for event loop
 sf::RectangleShape SFML::getGenerateButton() const 
 {
     return genButton;

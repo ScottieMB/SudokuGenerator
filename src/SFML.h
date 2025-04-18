@@ -11,8 +11,7 @@ class Board;
 class SFML
 {
 public:
-    SFML();
-    SFML(sf::RenderWindow& window);
+    SFML() = default;
 
     void drawCell(sf::RenderWindow& window, sf::Font& font, const float& gridStartX, const float& gridStartY, const float& cellSize, Board& board);
     void drawGrid(sf::RenderWindow& window, const float& gridStartX, const float& gridStartY, const float& gridSize, const float& cellSize, const float& cellCenter);
