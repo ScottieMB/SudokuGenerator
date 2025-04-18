@@ -4,7 +4,6 @@
 #include <SFML/System.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics.hpp>
-#include <iostream>
 
 class Board;
 
@@ -17,6 +16,8 @@ public:
     void drawGrid(sf::RenderWindow& window, const float& gridStartX, const float& gridStartY, const float& gridSize, const float& cellSize, const float& cellCenter);
     void drawHeader(sf::RenderWindow& window, sf::Font& font, sf::Text& header);
     void drawButtons(sf::RenderWindow& window, sf::Font& font, sf::Text& generate, sf::Text& reset);
+    void highlightCell(sf::RenderWindow& window, int row, int col, const float& gridStartX, const float& gridStartY, const float& cellSize);
+
     sf::RectangleShape getGenerateButton() const;
     sf::RectangleShape getResetButton() const;
 

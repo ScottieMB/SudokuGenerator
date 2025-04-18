@@ -39,13 +39,7 @@ bool Board::constructBoard(SFML& sfml, int index, sf::RenderWindow& window, sf::
         {
             board[row][col] = val;
 
-            window.clear(sf::Color(240, 240, 240));
-            sfml.drawHeader(window, font, header);
-            sfml.drawButtons(window, font, generate, reset);
-            sfml.drawGrid(window, gridStartX, gridStartY, gridSize, cellSize, cellCenter);
-            sfml.drawCell(window, font, gridStartX, gridStartY, cellSize, *this);
-            window.display();
-            sf::sleep(sf::milliseconds(50)); 
+            redrawBoard(sfml, window, font, row, col, *this, header, generate, reset, gridStartX, gridStartY, gridSize, cellSize, cellCenter);
 
             if (constructBoard(sfml, index + 1, window, font, header, generate, reset, gridStartX, gridStartY, cellSize, gridSize, cellCenter))
             {
@@ -54,13 +48,7 @@ bool Board::constructBoard(SFML& sfml, int index, sf::RenderWindow& window, sf::
             // backtrack
             board[row][col] = 0;
 
-            window.clear(sf::Color(240, 240, 240));
-            sfml.drawHeader(window, font, header);
-            sfml.drawButtons(window, font, generate, reset);
-            sfml.drawGrid(window, gridStartX, gridStartY, gridSize, cellSize, cellCenter);
-            sfml.drawCell(window, font, gridStartX, gridStartY, cellSize, *this);
-            window.display();       
-            sf::sleep(sf::milliseconds(50));
+            redrawBoard(sfml, window, font, row, col, *this, header, generate, reset, gridStartX, gridStartY, gridSize, cellSize, cellCenter);
         }
     }
 
@@ -124,4 +112,16 @@ void Board::resetBoard()
             board[i][j] = 0;
         }
     }
+}
+
+void Board::redrawBoard(SFML& sfml, sf::RenderWindow& window, sf::Font& font, int row, int col, Board& board, sf::Text& header, sf::Text& generate, sf::Text& reset, const float& gridStartX, const float& gridStartY, const float& gridSize, const float& cellSize, const float& cellCenter)
+{
+    window.clear(sf::Color(240, 240, 240));
+    sfml.drawHeader(window, font, header);
+    sfml.drawButtons(window, font, generate, reset);
+    sfml.drawGrid(window, gridStartX, gridStartY, gridSize, cellSize, cellCenter);
+    sfml.drawCell(window, font, gridStartX, gridStartY, cellSize, *this);
+    sfml.highlightCell(window, row, col, gridStartX, gridStartY, cellSize);
+    window.display();       
+    sf::sleep(sf::milliseconds(50));
 }

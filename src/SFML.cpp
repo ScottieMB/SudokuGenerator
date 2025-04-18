@@ -10,6 +10,7 @@ void SFML::drawCell(sf::RenderWindow& window, sf::Font& font, const float& gridS
             int value = board.getValue(row, col);
             if (value == 0) continue;
 
+            // Set up text style
             sf::Text cellText(font, std::to_string(value));
             cellText.setCharacterSize(18);
             cellText.setFillColor(sf::Color::Black);
@@ -37,28 +38,52 @@ void SFML::drawGrid(sf::RenderWindow& window, const float& gridStartX, const flo
     // Create our lines
     sf::VertexArray rows(sf::PrimitiveType::Lines, 20);
     sf::VertexArray cols(sf::PrimitiveType::Lines, 20);
-    sf::VertexArray thickLinesRows(sf::PrimitiveType::Lines, 10);
-    sf::VertexArray thickLinesCols(sf::PrimitiveType::Lines, 10);
+    std::vector<sf::RectangleShape> thickLinesRows;
+    std::vector<sf::RectangleShape> thickLinesCols;
 
     for (int i = 0; i < 20; i += 2)
     {
-        // rows
         float x = gridStartX + i * cellSize;
-        cols[i].position = sf::Vector2f(x, gridStartY);
-        cols[i + 1].position = sf::Vector2f(x, gridStartY + gridSize);
-        cols[i].color = sf::Color::Blue;
-        cols[i + 1].color = sf::Color::Blue;
-
-        // cols
         float y = gridStartY + i * cellSize;
-        rows[i].position = sf::Vector2f(gridStartX, y);
-        rows[i + 1].position = sf::Vector2f(gridStartX + gridSize, y);
-        rows[i].color = sf::Color::Blue;
-        rows[i + 1].color = sf::Color::Blue;
+        
+        if (i % 3 == 0)
+        {
+            sf::RectangleShape thickRow(sf::Vector2f(gridSize, 2.0f));
+            thickRow.setFillColor(sf::Color::Blue);
+            thickRow.setPosition(sf::Vector2f(gridStartX, gridStartY + (i * cellSize)));
+            thickLinesRows.push_back(thickRow);
+
+            sf::RectangleShape thickCol(sf::Vector2f(2.0f, gridSize));
+            thickCol.setFillColor(sf::Color::Blue);
+            thickCol.setPosition(sf::Vector2f(gridStartX + (i * cellSize), gridStartY));
+            thickLinesCols.push_back(thickCol);
+        }
+        else
+        {
+            cols[i].position = sf::Vector2f(x, gridStartY);
+            cols[i + 1].position = sf::Vector2f(x, gridStartY + gridSize);
+            cols[i].color = sf::Color::Blue;
+            cols[i + 1].color = sf::Color::Blue;
+
+            rows[i].position = sf::Vector2f(gridStartX, y);
+            rows[i + 1].position = sf::Vector2f(gridStartX + gridSize, y);
+            rows[i].color = sf::Color::Blue;
+            rows[i + 1].color = sf::Color::Blue;
+        }
     }
 
     window.draw(rows);
     window.draw(cols);
+
+    for (auto& thickRow : thickLinesRows) 
+    {
+        window.draw(thickRow);
+    }
+
+    for (auto& thickCol : thickLinesCols) 
+    {
+        window.draw(thickCol);
+    }
 }
 
 void SFML::drawButtons(sf::RenderWindow& window, sf::Font& font, sf::Text& generate, sf::Text& reset)
@@ -136,6 +161,14 @@ void SFML::drawHeader(sf::RenderWindow& window, sf::Font& font, sf::Text& header
     header.setPosition(pos);
 
     window.draw(header);
+}
+
+void SFML::highlightCell(sf::RenderWindow& window, int row, int col, const float& gridStartX, const float& gridStartY, const float& cellSize)
+{
+    sf::RectangleShape highlight(sf::Vector2f(cellSize * 2, cellSize * 2));
+    highlight.setPosition(sf::Vector2f(gridStartX + col * cellSize * 2, gridStartY + row * cellSize * 2));
+    highlight.setFillColor(sf::Color(0, 255, 0, 100));
+    window.draw(highlight);
 }
 
 // Helper functions for event loop
