@@ -3,6 +3,7 @@
 #include <SFML/Window/Event.hpp>
 #include "Board.h"
 #include "SFML.h"
+#include "Data.h"
 
 int main() 
 {
@@ -13,16 +14,16 @@ int main()
     sf::Text reset(font);
     sf::Text header(font);
 
-    // Generate the 9x9 board and declare the SFML object
+    // Generate the 9x9 board and declare objects
     srand(time(NULL));
     Board myBoard;
     SFML sfml;
+    Data data;
 
     const float gridSize = 450.0f;
     const float gridStartX = 75.0f;
     const float gridStartY = 75.0f;
     const float cellSize = gridSize / 18.0f;
-    const float cellCenter = cellSize / 2.0f;
 
     while (window.isOpen()) {
         while (const std::optional event = window.pollEvent()) 
@@ -47,7 +48,7 @@ int main()
                 // generate the board
                 if (genBounds.contains(mousePos))
                 {
-                    myBoard.constructBoard(sfml, 0, window, font, header, generate, reset, gridStartX, gridStartY, cellSize, gridSize, cellCenter);
+                    myBoard.constructBoard(sfml, 0, window, font, header, generate, reset, data);
                 }
 
                 // reset it back to 0s
@@ -63,13 +64,12 @@ int main()
 
         // Draw everything
         sfml.drawHeader(window, font, header);
-        sfml.drawGrid(window, gridStartX, gridStartY, gridSize, cellSize, cellCenter);
+        sfml.drawGrid(window, data);
         sfml.drawButtons(window, font, generate, reset);
         sfml.drawCell(window, font, gridStartX, gridStartY, cellSize, myBoard);
 
         // Display the contents of the window
         window.display();
     }
-
     return 0;
 }

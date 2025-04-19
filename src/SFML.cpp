@@ -1,5 +1,6 @@
 #include "Board.h"
 #include "SFML.h"
+#include "Data.h"
 
 void SFML::drawCell(sf::RenderWindow& window, sf::Font& font, const float& gridStartX, const float& gridStartY, const float& cellSize, Board& board)
 {
@@ -33,7 +34,7 @@ void SFML::drawCell(sf::RenderWindow& window, sf::Font& font, const float& gridS
     }
 }
 
-void SFML::drawGrid(sf::RenderWindow& window, const float& gridStartX, const float& gridStartY, const float& gridSize, const float& cellSize, const float& cellCenter)
+void SFML::drawGrid(sf::RenderWindow& window, const Data& data)
 {   
     // Create our lines
     sf::VertexArray rows(sf::PrimitiveType::Lines, 20);
@@ -43,30 +44,30 @@ void SFML::drawGrid(sf::RenderWindow& window, const float& gridStartX, const flo
 
     for (int i = 0; i < 20; i += 2)
     {
-        float x = gridStartX + i * cellSize;
-        float y = gridStartY + i * cellSize;
+        float x = data.gridStartX + i * data.cellSize;
+        float y = data.gridStartY + i * data.cellSize;
         
         if (i % 3 == 0)
         {
-            sf::RectangleShape thickRow(sf::Vector2f(gridSize, 2.0f));
+            sf::RectangleShape thickRow(sf::Vector2f(data.gridSize, 2.0f));
             thickRow.setFillColor(sf::Color::Blue);
-            thickRow.setPosition(sf::Vector2f(gridStartX, gridStartY + (i * cellSize)));
+            thickRow.setPosition(sf::Vector2f(data.gridStartX, data.gridStartY + (i * data.cellSize)));
             thickLinesRows.push_back(thickRow);
 
-            sf::RectangleShape thickCol(sf::Vector2f(2.0f, gridSize));
+            sf::RectangleShape thickCol(sf::Vector2f(2.0f, data.gridSize));
             thickCol.setFillColor(sf::Color::Blue);
-            thickCol.setPosition(sf::Vector2f(gridStartX + (i * cellSize), gridStartY));
+            thickCol.setPosition(sf::Vector2f(data.gridStartX + (i * data.cellSize), data.gridStartY));
             thickLinesCols.push_back(thickCol);
         }
         else
         {
-            cols[i].position = sf::Vector2f(x, gridStartY);
-            cols[i + 1].position = sf::Vector2f(x, gridStartY + gridSize);
+            cols[i].position = sf::Vector2f(x, data.gridStartY);
+            cols[i + 1].position = sf::Vector2f(x, data.gridStartY + data.gridSize);
             cols[i].color = sf::Color::Blue;
             cols[i + 1].color = sf::Color::Blue;
 
-            rows[i].position = sf::Vector2f(gridStartX, y);
-            rows[i + 1].position = sf::Vector2f(gridStartX + gridSize, y);
+            rows[i].position = sf::Vector2f(data.gridStartX, y);
+            rows[i + 1].position = sf::Vector2f(data.gridStartX + data.gridSize, y);
             rows[i].color = sf::Color::Blue;
             rows[i + 1].color = sf::Color::Blue;
         }

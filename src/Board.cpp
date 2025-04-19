@@ -1,5 +1,6 @@
 #include "Board.h"
 #include "SFML.h"
+#include "Data.h"
 
 // populate board with 0s
 Board::Board() : board(9, std::vector<int>(9, 0))
@@ -8,7 +9,7 @@ Board::Board() : board(9, std::vector<int>(9, 0))
 }
 
 // construct valid sudoku board
-bool Board::constructBoard(SFML& sfml, int index, sf::RenderWindow& window, sf::Font& font, sf::Text& header, sf::Text& generate, sf::Text& reset, const float& gridStartX, const float& gridStartY, const float& cellSize, const float& gridSize, const float& cellCenter)
+bool Board::constructBoard(SFML& sfml, int index, sf::RenderWindow& window, sf::Font& font, sf::Text& header, sf::Text& generate, sf::Text& reset, const Data& data)
 {
     if (index >= 81) 
     {
@@ -39,16 +40,16 @@ bool Board::constructBoard(SFML& sfml, int index, sf::RenderWindow& window, sf::
         {
             board[row][col] = val;
 
-            redrawBoard(sfml, window, font, row, col, *this, header, generate, reset, gridStartX, gridStartY, gridSize, cellSize, cellCenter);
+            redrawBoard(sfml, window, font, row, col, *this, header, generate, reset, data);
 
-            if (constructBoard(sfml, index + 1, window, font, header, generate, reset, gridStartX, gridStartY, cellSize, gridSize, cellCenter))
+            if (constructBoard(sfml, index + 1, window, font, header, generate, reset, data))
             {
                 return true;
             }
             // backtrack
             board[row][col] = 0;
 
-            redrawBoard(sfml, window, font, row, col, *this, header, generate, reset, gridStartX, gridStartY, gridSize, cellSize, cellCenter);
+            redrawBoard(sfml, window, font, row, col, *this, header, generate, reset, data);
         }
     }
 
@@ -114,14 +115,14 @@ void Board::resetBoard()
     }
 }
 
-void Board::redrawBoard(SFML& sfml, sf::RenderWindow& window, sf::Font& font, int row, int col, Board& board, sf::Text& header, sf::Text& generate, sf::Text& reset, const float& gridStartX, const float& gridStartY, const float& gridSize, const float& cellSize, const float& cellCenter)
+void Board::redrawBoard(SFML& sfml, sf::RenderWindow& window, sf::Font& font, int row, int col, Board& board, sf::Text& header, sf::Text& generate, sf::Text& reset, const Data& data)
 {
     window.clear(sf::Color(240, 240, 240));
     sfml.drawHeader(window, font, header);
     sfml.drawButtons(window, font, generate, reset);
-    sfml.drawGrid(window, gridStartX, gridStartY, gridSize, cellSize, cellCenter);
-    sfml.drawCell(window, font, gridStartX, gridStartY, cellSize, *this);
-    sfml.highlightCell(window, row, col, gridStartX, gridStartY, cellSize);
+    sfml.drawGrid(window, data);
+    sfml.drawCell(window, font, data.gridStartX, data.gridStartY, data.cellSize, *this);
+    sfml.highlightCell(window, row, col, data.gridStartX, data.gridStartY, data.cellSize);
     window.display();       
     sf::sleep(sf::milliseconds(50));
 }
