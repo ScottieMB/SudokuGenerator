@@ -49,12 +49,12 @@ void SFML::drawGrid(sf::RenderWindow& window, const Data& data)
         
         if (i % 3 == 0)
         {
-            sf::RectangleShape thickRow(sf::Vector2f(data.gridSize, 2.0f));
+            sf::RectangleShape thickRow(sf::Vector2f(data.gridSize + 1.5f, 2.0f));
             thickRow.setFillColor(sf::Color::Blue);
             thickRow.setPosition(sf::Vector2f(data.gridStartX, data.gridStartY + (i * data.cellSize)));
             thickLinesRows.push_back(thickRow);
 
-            sf::RectangleShape thickCol(sf::Vector2f(2.0f, data.gridSize));
+            sf::RectangleShape thickCol(sf::Vector2f(2.0f, data.gridSize + 1.5f));
             thickCol.setFillColor(sf::Color::Blue);
             thickCol.setPosition(sf::Vector2f(data.gridStartX + (i * data.cellSize), data.gridStartY));
             thickLinesCols.push_back(thickCol);

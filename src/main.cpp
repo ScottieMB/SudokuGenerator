@@ -8,7 +8,7 @@
 int main() 
 {
     // create window and set up text
-    sf::RenderWindow window(sf::VideoMode({600, 600}), "Sudoku");
+    sf::RenderWindow window(sf::VideoMode({600, 600}), "Sudoku", sf::Style::Close);
     sf::Font font("assets/SpecialGothicCondensedOne-Regular.ttf");
     sf::Text generate(font);
     sf::Text reset(font);
